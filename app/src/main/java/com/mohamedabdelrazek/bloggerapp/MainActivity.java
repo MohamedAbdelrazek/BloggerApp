@@ -1,17 +1,75 @@
 package com.mohamedabdelrazek.bloggerapp;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+
 public class MainActivity extends AppCompatActivity {
+    private RecyclerView mBlogList;
+    BlogAdapter mBlogAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mBlogList = findViewById(R.id.blog_recycler);
+        mBlogList.setHasFixedSize(true);
+        mBlogList.setLayoutManager(new LinearLayoutManager(this));
+
+
+        Query query = FirebaseDatabase.getInstance()
+                .getReference()
+                .child("Blog");
+
+
+        ChildEventListener childEventListener = new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String previousChildName) {
+                // ...
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName) {
+                // ...
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                // ...
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String previousChildName) {
+                // ...
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // ...
+            }
+        };
+        query.addChildEventListener(childEventListener);
+
+        FirebaseRecyclerOptions<BlogModel> options =
+                new FirebaseRecyclerOptions.Builder<BlogModel>()
+                        .setQuery(query, BlogModel.class)
+                        .build();
+
+
+        mBlogAdapter = new BlogAdapter(options, this);
+        mBlogList.setAdapter(mBlogAdapter);
+
     }
 
 
@@ -35,4 +93,12 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mBlogAdapter.startListening();
+
+    }
+
 }
