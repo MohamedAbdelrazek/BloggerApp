@@ -6,8 +6,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
@@ -17,11 +18,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.theartofdev.edmodo.cropper.CropImage;
 
 public class BlogActivity extends AppCompatActivity {
     private static final int GALLERY_REQUEST = 11;
     private ImageButton mImageButton;
-    private Button mSubmitButton;
     private Uri mImageUri;
     private StorageReference mStorageReference;
     private ProgressDialog mProgressDialog;
@@ -34,7 +35,6 @@ public class BlogActivity extends AppCompatActivity {
         mProgressDialog = new ProgressDialog(this);
         setContentView(R.layout.activity_blog);
         mImageButton = findViewById(R.id.select_image);
-        mSubmitButton = findViewById(R.id.submit_button);
 
         mImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -43,15 +43,6 @@ public class BlogActivity extends AppCompatActivity {
                 Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
                 galleryIntent.setType("image/*");
                 startActivityForResult(galleryIntent, GALLERY_REQUEST);
-
-            }
-        });
-
-        mSubmitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startPosting();
-
 
             }
         });
@@ -89,8 +80,45 @@ public class BlogActivity extends AppCompatActivity {
         if (requestCode == GALLERY_REQUEST && resultCode == RESULT_OK) {
 
             mImageUri = data.getData();
-            mImageButton.setImageURI(mImageUri);
+            CropImage.activity()
 
+                    .setAspectRatio(1, 1)
+                    .start(this);
         }
+
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+                mImageUri = result.getUri();
+
+                mImageButton.setImageURI(mImageUri);
+
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception error = result.getError();
+            }
+        }
+
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_blog_activity, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.ation_save:
+                startPosting();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+
     }
 }

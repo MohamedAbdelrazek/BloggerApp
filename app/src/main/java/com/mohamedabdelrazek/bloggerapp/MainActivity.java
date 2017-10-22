@@ -7,7 +7,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
-
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -18,6 +17,7 @@ import com.google.firebase.database.Query;
 public class MainActivity extends AppCompatActivity {
     private RecyclerView mBlogList;
     BlogAdapter mBlogAdapter;
+    FirebaseDatabase mFirebaseDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,11 +26,10 @@ public class MainActivity extends AppCompatActivity {
         mBlogList = findViewById(R.id.blog_recycler);
         mBlogList.setHasFixedSize(true);
         mBlogList.setLayoutManager(new LinearLayoutManager(this));
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+    //    mFirebaseDatabase.setPersistenceEnabled(true);
 
-
-        Query query = FirebaseDatabase.getInstance()
-                .getReference()
-                .child("Blog");
+        Query query = mFirebaseDatabase.getReference().child("Blog");
 
 
         ChildEventListener childEventListener = new ChildEventListener() {

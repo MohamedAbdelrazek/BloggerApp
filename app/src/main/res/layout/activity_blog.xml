@@ -10,6 +10,7 @@
         android:id="@+id/select_image"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:maxHeight="250dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:adjustViewBounds="true"
@@ -25,6 +26,7 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
+        android:layout_below="@+id/select_image"
         android:layout_marginTop="20dp"
         android:background="@drawable/handsome_frame"
         android:ems="10"
@@ -42,19 +44,11 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
         android:background="@drawable/handsome_frame"
         android:ems="10"
         android:hint="Post Description ..."
         android:inputType="textMultiLine"
+        android:paddingBottom="20dp"
         android:padding="15dp" />
-
-    <Button
-        android:id="@+id/submit_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:background="@color/colorPrimary"
-        android:text="Submit Post"
-        android:textColor="@android:color/white" />
 </RelativeLayout>

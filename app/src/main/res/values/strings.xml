@@ -3,4 +3,5 @@
     <string name="new_post">Post New Blog</string>
     <string name="add_post">Add Post</string>
     <string name="setting">Setting</string>
+    <string name="save_post">Save</string>
 </resources>
