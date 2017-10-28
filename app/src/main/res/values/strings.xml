@@ -4,4 +4,8 @@
     <string name="add_post">Add Post</string>
     <string name="setting">Setting</string>
     <string name="save_post">Save</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="sign_in_cancelled">sign in has been canceled!</string>
+    <string name="no_internet_connection">there is no internet connection</string>
+    <string name="unknown_error">unknown error occured!</string>
 </resources>

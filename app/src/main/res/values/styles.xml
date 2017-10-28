@@ -8,4 +8,10 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="LRFTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
+
+        <item name="colorPrimary">@color/colorPrimaryLRF</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDarkLRF</item>
+        <item name="colorAccent">@color/colorAccentLRF</item>
+    </style>
 </resources>
