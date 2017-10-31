@@ -1,16 +1,22 @@
 package com.mohamedabdelrazek.bloggerapp;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
@@ -20,22 +26,34 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.theartofdev.edmodo.cropper.CropImage;
 
-public class BlogActivity extends AppCompatActivity {
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
+/**
+ * Created by Mohamed on 31/10/2017.
+ */
+
+public class ProfileFragment extends Fragment {
     private static final int GALLERY_REQUEST = 11;
-    private ImageButton mImageButton;
     private Uri mImageUri;
     private StorageReference mStorageReference;
     private ProgressDialog mProgressDialog;
     private DatabaseReference mDatabaseReference;
+    @BindView(R.id.select_image)
+    ImageButton mImageButton;
+    @BindView(R.id.post_title)
+    EditText mTitleTextView;
+    @BindView(R.id.post_desc)
+    EditText mDescTextView;
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_profile, container, false);
+        ButterKnife.bind(this, view);
+        setHasOptionsMenu(true);
         mStorageReference = FirebaseStorage.getInstance().getReference();
-        mProgressDialog = new ProgressDialog(this);
-        setContentView(R.layout.activity_blog);
-        mImageButton = findViewById(R.id.select_image);
-
+        mProgressDialog = new ProgressDialog(getContext());
         mImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -47,14 +65,15 @@ public class BlogActivity extends AppCompatActivity {
             }
         });
         mDatabaseReference = FirebaseDatabase.getInstance().getReference().child("Blog");
+        return view;
     }
 
     private void startPosting() {
 
         mProgressDialog.setMessage("Posting ....");
-
-        final String postTitle = ((EditText) findViewById(R.id.post_title)).getText().toString();
-        final String postDesc = ((EditText) findViewById(R.id.post_desc)).getText().toString();
+        mProgressDialog.setCancelable(false);
+        final String postTitle = mTitleTextView.getText().toString();
+        final String postDesc = mDescTextView.getText().toString();
         if (!TextUtils.isEmpty(postTitle) && !TextUtils.isEmpty(postDesc) && mImageUri != null) {
             mProgressDialog.show();
             StorageReference filePath = mStorageReference.child("Blog_Images").child(Utils.getRandomName());
@@ -71,45 +90,48 @@ public class BlogActivity extends AppCompatActivity {
             });
 
 
+        } else {
+
+            Toast.makeText(getContext(), "Fill in all fields!", Toast.LENGTH_SHORT).show();
         }
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == GALLERY_REQUEST && resultCode == RESULT_OK) {
+        if (requestCode == GALLERY_REQUEST && resultCode == Activity.RESULT_OK) {
 
             mImageUri = data.getData();
             CropImage.activity()
 
                     .setAspectRatio(1, 1)
-                    .start(this);
+                    .start(getActivity());
         }
 
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
-            if (resultCode == RESULT_OK) {
+            if (resultCode == Activity.RESULT_OK) {
                 mImageUri = result.getUri();
 
                 mImageButton.setImageURI(mImageUri);
 
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                Exception error = result.getError();
+                result.getError();
             }
         }
 
 
     }
 
+
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_blog_activity, menu);
-        return super.onCreateOptionsMenu(menu);
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_blog_activity, menu);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         switch (item.getItemId()) {
             case R.id.ation_save:
                 startPosting();
@@ -119,6 +141,7 @@ public class BlogActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
 
-
     }
+
+
 }

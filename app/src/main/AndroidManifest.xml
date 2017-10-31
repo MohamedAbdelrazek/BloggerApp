@@ -14,11 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
-            android:launchMode="singleTop" />
-        <activity
             android:name=".SignInActivity"
             android:theme="@style/LRFTheme">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -27,18 +25,18 @@
         </activity>
         <activity
             android:name=".SignUpActivity"
-
             android:theme="@style/LRFTheme" />
-        <activity
-            android:name=".BlogActivity"
-            android:label="@string/new_post"
-            android:parentActivityName=".MainActivity" />
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />
         <activity
             android:name=".ForgetPasswordActivity"
             android:theme="@style/LRFTheme" />
+        <activity
+            android:name=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
     </application>
 
 </manifest>

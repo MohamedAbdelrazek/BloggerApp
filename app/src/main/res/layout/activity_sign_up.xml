@@ -19,7 +19,7 @@
             android:fontFamily="serif|sans"
             android:text="Sign up"
             android:textAlignment="center"
-            android:textColor="#A9FDAF"
+            android:textColor="@color/color_textLRF"
             android:textSize="70dp"
             android:typeface="serif" />
 
@@ -76,7 +76,6 @@
                 android:hint="Password"
                 android:textSize="20dp"
                 android:inputType="textPassword"
-
                 android:textAlignment="center"
                 android:textColor="@color/color_text" />
         </android.support.design.widget.TextInputLayout>
@@ -91,7 +90,7 @@
             android:background="@drawable/handsome_frame"
             android:padding="12dp"
             android:text="Go!"
-            android:textColor="#A9FDAF"
+            android:textColor="@color/color_textLRF"
             android:textSize="30dp" />
 
         <TextView
@@ -102,7 +101,6 @@
             android:gravity="center"
             android:text="Already a member? Login"
             android:textColor="@color/color_text"
-
             android:textSize="20dp" />
 
     </LinearLayout>
